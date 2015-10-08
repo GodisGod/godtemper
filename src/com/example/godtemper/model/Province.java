@@ -1,4 +1,4 @@
-package model;
+package com.example.godtemper.model;
 
 public class Province {
 

@@ -1,9 +1,12 @@
-package model;
+package com.example.godtemper.db;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import db.GodTemperOpenHelper;
+import com.example.godtemper.model.City;
+import com.example.godtemper.model.County;
+import com.example.godtemper.model.Province;
+
 import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
