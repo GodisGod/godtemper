@@ -9,14 +9,32 @@
         android:layout_height="50dp"
         android:background="#484E61" >
 
+        <Button
+            android:id="@+id/switch_city"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/agt_login" />
+
         <TextView
             android:id="@+id/city_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:text="city_name"
             android:textColor="#fff"
-            android:textSize="24sp"
-            android:text="city_name" />
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/refresh_weather"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_launcher"
+            android:text="刷新" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -32,9 +50,9 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:text="publish_text"
             android:textColor="#FFF"
-            android:textSize="18sp"
-            android:text="publish_text" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/weather_info_layout"
@@ -48,9 +66,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
+                android:text="current_data"
                 android:textColor="#FFF"
-                android:textSize="18sp"
-                android:text="current_data" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/weather_desp"
@@ -58,9 +76,9 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
+                android:text="weather_desp"
                 android:textColor="#FFF"
-                android:textSize="40sp" 
-                android:text="weather_desp"/>
+                android:textSize="40sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -73,9 +91,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:text="temp1"
                     android:textColor="#FFF"
-                    android:textSize="40sp"
-                    android:text="temp1" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,28 +110,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:text="temp2"
                     android:textColor="#FFF"
-                    android:textSize="40sp" 
-                    android:text="temp2"/>
+                    android:textSize="40sp" />
             </LinearLayout>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/switch_city"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/weather_info_layout"
-            android:layout_alignParentBottom="true"
-            android:text="切换城市" />
-
-        <Button
-            android:id="@+id/refresh_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/publish_text"
-            android:layout_alignParentBottom="true"
-            android:text="刷新天气" />
-
     </RelativeLayout>
 
 </LinearLayout>
