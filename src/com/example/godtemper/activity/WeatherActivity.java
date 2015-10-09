@@ -1,6 +1,7 @@
 package com.example.godtemper.activity;
 
 import com.example.godtemper.R;
+import com.example.godtemper.service.AutoUpdateService;
 import com.example.godtemper.util.HttpCallbackListener;
 import com.example.godtemper.util.HttpUtil;
 import com.example.godtemper.util.Utility;
@@ -136,6 +137,9 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
+		//默认启动后台自动更新服务
+		Intent intent = new Intent(this,AutoUpdateService.class);
+		startActivity(intent);
 	}
 	@Override
 	public void onClick(View v) {

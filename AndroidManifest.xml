@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.godtemper.activity.WeatherActivity"></activity>
+        <service android:name="com.example.godtemper.service.AutoUpdateService"></service>
+        <receiver android:name="com.example.godtemper.receiver.AutoUpdateReceiver"></receiver>
     </application>
 
 </manifest>
