@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import android.util.Log;
+
 public class HttpUtil {
 	public static void sendHttpRequest(final String address,final HttpCallbackListener listener){
 		new Thread(new Runnable() {
@@ -31,22 +33,14 @@ public class HttpUtil {
 					while((line = reader.readLine())!=null){
 						response.append(line);
 					}
+					Log.i("LHD", response.toString());
 					if(listener != null){
 						//回调onFinish()方法
 						listener.onFinish(response.toString());
 					}
 					
 					
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}catch (Exception e) {
+				} catch (Exception e) {
 					if(listener != null){
 						//回调onError()方法
 						listener.onError(e);

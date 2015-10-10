@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class Utility {
 	/**
@@ -61,7 +62,7 @@ public class Utility {
 				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class Utility {
 	 * @param context
 	 * @param response
 	 */
-	public static void handleWeatherResponse(Context context,String response) {
+	public static void handleWeatherResponse(Context context,final String response) {
 		try {
 			JSONObject jsonObject = new JSONObject(response);
 			JSONObject weatherInfo = jsonObject.getJSONObject("weatherInfo");
@@ -102,6 +103,7 @@ public class Utility {
 			String temp2 = weatherInfo.getString("temp2");
 			String weatherDesp = weatherInfo.getString("weather");
 			String publishTime = weatherInfo.getString("ptime");
+			Log.i("LHD", cityName+weatherCode+temp1+temp2+weatherDesp+publishTime);
 			saveWeatherInfo(context,cityName,weatherCode,temp1,temp2,weatherDesp,publishTime);
 		} catch (JSONException e) {
 			e.printStackTrace();

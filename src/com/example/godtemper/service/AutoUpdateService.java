@@ -33,8 +33,8 @@ public class AutoUpdateService extends Service{
 		AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		int anHour = 8*60*60*1000;//8个小时的毫秒数
 		long triggerAtTime = SystemClock.elapsedRealtime()+anHour;
-		Intent intent2 = new Intent(this,AutoUpdateReceiver.class);
-		PendingIntent pIntent	= PendingIntent.getBroadcast(this, 0, intent2, 0);
+		Intent i = new Intent(this,AutoUpdateReceiver.class);
+		PendingIntent pIntent	= PendingIntent.getBroadcast(this, 0, i, 0);
 		manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pIntent);
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -43,7 +43,7 @@ public class AutoUpdateService extends Service{
 	 */
 	protected void updateWeather() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String weatherCode = prefs.getString("weather+code", "");
+		String weatherCode = prefs.getString("weather_code", "");
 		String address = "http://www.weather.com.cn/data/cityinfo/"+weatherCode+".html";
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			

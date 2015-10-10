@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -56,7 +57,6 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		switchcity = (Button) findViewById(R.id.switch_city);
 		refreshWeather = (Button) findViewById(R.id.refresh_weather);
 		String countyCode = getIntent().getStringExtra("county_code");
-
 		//实例化广告条
 		AdView adView = new AdView(this,AdSize.FIT_SCREEN);
 		//获取要嵌入广告条的布局
@@ -67,6 +67,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		if (!TextUtils.isEmpty(countyCode)) {
 			// 有县级代号时就去查询天气
 			publishText.setText("同步中...");
+			Log.i("LHD", "countyCode = "+countyCode);
 			weatherInfoLayout.setVisibility(View.INVISIBLE);
 			cityNameText.setVisibility(View.INVISIBLE);
 			queryWeatherCode(countyCode);
@@ -84,8 +85,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * @param countyCode
 	 */
 	private void queryWeatherCode(String countyCode) {
-		String address = "http://www.weather.com.cn/data/list3/city"
-				+ countyCode + ".xml";
+		String address = "http://www.weather.com.cn/data/list3/city" + countyCode + ".xml";
 		queryFromServer(address, "countyCode");
 	}
 
@@ -95,29 +95,32 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * @param weatherCode
 	 */
 	private void queryWeatherInfo(String weatherCode) {
-		String address = "http://www.weather.com.cn/data/cityinfo"
-				+ weatherCode + ".html";
+		//拼接网址不要换行，不然会出错，无法访问
+		String address = "http://www.weather.com.cn/data/cityinfo/" + weatherCode + ".html";
 		queryFromServer(address, "weatherCode");
 	}
 
-	private void queryFromServer(String address, final String type) {
+	private void queryFromServer(final String address, final String type) {
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 
 			@Override
-			public void onFinish(String response) {
+			public void onFinish(final String response) {
 				if ("countyCode".equals(type)) {
 					if (!TextUtils.isEmpty(response)) {
 						// 从服务器返回的数据中解析出天气代号
+						Log.i("LHD", response.toString());
 						String[] array = response.split("\\|");
 						if (array != null && array.length == 2) {
 							String weatherCode = array[1];
+							Log.i("LHD", "weatherCode"+weatherCode);
 							queryWeatherInfo(weatherCode);
 						}
 					}
-				} else if ("weatherCode".equals(type)) {
+				} 
+				if ("weatherCode".equals(type)) {
+					Log.i("LHD", "else if weatherCode.equals(type))");
 					// 处理服务器返回的天气信息
-					Utility.handleWeatherResponse(WeatherActivity.this,
-							response);
+					Utility.handleWeatherResponse(WeatherActivity.this, response);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							showWeather();
