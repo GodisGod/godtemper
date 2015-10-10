@@ -1,5 +1,8 @@
 package com.example.godtemper.activity;
 
+import net.youmi.android.banner.AdSize;
+import net.youmi.android.banner.AdView;
+
 import com.example.godtemper.R;
 import com.example.godtemper.service.AutoUpdateService;
 import com.example.godtemper.util.HttpCallbackListener;
@@ -53,6 +56,14 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		switchcity = (Button) findViewById(R.id.switch_city);
 		refreshWeather = (Button) findViewById(R.id.refresh_weather);
 		String countyCode = getIntent().getStringExtra("county_code");
+
+		//实例化广告条
+		AdView adView = new AdView(this,AdSize.FIT_SCREEN);
+		//获取要嵌入广告条的布局
+		LinearLayout adLayout = (LinearLayout) findViewById(R.id.adLayout);
+		//将广告条加入到布局中
+		adLayout.addView(adView);
+		
 		if (!TextUtils.isEmpty(countyCode)) {
 			// 有县级代号时就去查询天气
 			publishText.setText("同步中...");
@@ -86,61 +97,65 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	private void queryWeatherInfo(String weatherCode) {
 		String address = "http://www.weather.com.cn/data/cityinfo"
 				+ weatherCode + ".html";
-		queryFromServer(address, weatherCode);
+		queryFromServer(address, "weatherCode");
 	}
 
 	private void queryFromServer(String address, final String type) {
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
-			
+
 			@Override
 			public void onFinish(String response) {
-				if("countyCode".equals(type)){
-					if(!TextUtils.isEmpty(response)){
-						//从服务器返回的数据中解析出天气代号 
+				if ("countyCode".equals(type)) {
+					if (!TextUtils.isEmpty(response)) {
+						// 从服务器返回的数据中解析出天气代号
 						String[] array = response.split("\\|");
-						if(array!=null && array.length == 2){
+						if (array != null && array.length == 2) {
 							String weatherCode = array[1];
 							queryWeatherInfo(weatherCode);
 						}
 					}
-				}else if("weatherCode".equals(type)){
-					//处理服务器返回的天气信息
-					Utility.handleWeatherResponse(WeatherActivity.this, response);
-					runOnUiThread( new Runnable() {
+				} else if ("weatherCode".equals(type)) {
+					// 处理服务器返回的天气信息
+					Utility.handleWeatherResponse(WeatherActivity.this,
+							response);
+					runOnUiThread(new Runnable() {
 						public void run() {
 							showWeather();
 						}
 					});
 				}
 			}
-			
+
 			@Override
 			public void onError(Exception e) {
 				runOnUiThread(new Runnable() {
 					public void run() {
-					publishText.setText("同步失败");	
+						publishText.setText("同步失败");
 					}
 				});
 			}
 		});
 	}
+
 	/**
 	 * 从SharedPreferences文件中读取存储的天气信息，并显示到界面上
 	 */
 	private void showWeather() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		cityNameText.setText(prefs.getString("city_name", ""));
 		temp1text.setText(prefs.getString("temp1", ""));
 		temp2text.setText(prefs.getString("temp2", ""));
 		weatherDespText.setText(prefs.getString("weather_desp", ""));
-		publishText.setText("今天"+prefs.getString("publish_time", "")+"发布");
+		publishText.setText("今天" + prefs.getString("publish_time", "") + "发布");
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
-		//默认启动后台自动更新服务
-		Intent intent = new Intent(this,AutoUpdateService.class);
-		startActivity(intent);
+		// 默认启动后台自动更新服务
+//		Intent intent = new Intent(this, AutoUpdateService.class);
+//		startActivity(intent);
 	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

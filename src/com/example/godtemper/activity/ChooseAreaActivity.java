@@ -3,6 +3,8 @@ package com.example.godtemper.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.youmi.android.AdManager;
+
 import com.example.godtemper.R;
 import com.example.godtemper.db.GodTemperDB;
 import com.example.godtemper.model.City;
@@ -64,6 +66,10 @@ public class ChooseAreaActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		//有米广告初始化
+		AdManager.getInstance(this).init("f3ba408357421068", "3850f52540d49a1f",false);
+		
+		
 		isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		//已经选择了城市且不是从WeatherActivity跳转过来，才会直接跳转到WeatherActivity
