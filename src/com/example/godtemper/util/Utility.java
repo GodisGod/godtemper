@@ -96,7 +96,12 @@ public class Utility {
 	public static void handleWeatherResponse(Context context,final String response) {
 		try {
 			JSONObject jsonObject = new JSONObject(response);
-			JSONObject weatherInfo = jsonObject.getJSONObject("weatherInfo");
+	/**
+	 * 我花费了两天时间来找这个BUG！！！就因为小写的i被我误写成了大写的I
+	 * 这样不细心，又这样笨、
+	 * 		JSONObject weatherInfo = jsonObject.getJSONObject("weatherInfo"); 
+	 */
+			JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo"); 
 			String cityName = weatherInfo.getString("city");
 			String weatherCode = weatherInfo.getString("cityid");
 			String temp1 = weatherInfo.getString("temp1");
