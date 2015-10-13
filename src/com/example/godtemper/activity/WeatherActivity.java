@@ -160,7 +160,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	private void showWeather() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		cityNameText.setText(prefs.getString("city_name", ""));
+		cityNameText.setText(prefs.getString("cityName", ""));
 		temp1text.setText(prefs.getString("temp1", ""));
 		temp2text.setText(prefs.getString("temp2", ""));
 		weatherDespText.setText(prefs.getString("weather_desp", ""));
@@ -184,6 +184,12 @@ public class WeatherActivity extends Activity implements OnClickListener {
 			main_layout.setBackgroundResource(R.drawable.duoyun);
 		}else if ("Ð¡Óê".equals(weatherState)) {
 			main_layout.setBackgroundResource(R.drawable.weimei_de_yu);
+		}else if(weatherState.contains("·ç")){
+			main_layout.setBackgroundResource(R.drawable.storm);
+		}else if (weatherState.contains("×ª")) {
+			main_layout.setBackgroundResource(R.drawable.duoyuzhuanqing);
+		}else if (weatherState.contains("À×")) {
+			main_layout.setBackgroundResource(R.drawable.leiyu);
 		}
 		
 	}
