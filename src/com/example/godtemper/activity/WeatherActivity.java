@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class WeatherActivity extends Activity implements OnClickListener {
@@ -40,6 +41,14 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * 更新天气按钮
 	 */
 	private Button refreshWeather;
+	/**
+	 * 主界面布局
+	 */
+	private RelativeLayout main_layout;
+	/**
+	 * 天气状态
+	 */
+	private String weatherstate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,8 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.weather_layout);
 		// 初始化各控件
+		main_layout = (RelativeLayout) findViewById(R.id.main_layout);
+		// main_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.rain));
 		weatherInfoLayout = (LinearLayout) findViewById(R.id.weather_info_layout);
 		cityNameText = (TextView) findViewById(R.id.city_name);
 		publishText = (TextView) findViewById(R.id.publish_text);
@@ -57,17 +68,17 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		switchcity = (Button) findViewById(R.id.switch_city);
 		refreshWeather = (Button) findViewById(R.id.refresh_weather);
 		String countyCode = getIntent().getStringExtra("county_code");
-		//实例化广告条
-		AdView adView = new AdView(this,AdSize.FIT_SCREEN);
-		//获取要嵌入广告条的布局
+		// 实例化广告条
+		AdView adView = new AdView(this, AdSize.FIT_SCREEN);
+		// 获取要嵌入广告条的布局
 		LinearLayout adLayout = (LinearLayout) findViewById(R.id.adLayout);
-		//将广告条加入到布局中
+		// 将广告条加入到布局中
 		adLayout.addView(adView);
-		
+
 		if (!TextUtils.isEmpty(countyCode)) {
 			// 有县级代号时就去查询天气
 			publishText.setText("同步中...");
-			Log.i("LHD", "countyCode = "+countyCode);
+			Log.i("LHD", "countyCode = " + countyCode);
 			weatherInfoLayout.setVisibility(View.INVISIBLE);
 			cityNameText.setVisibility(View.INVISIBLE);
 			queryWeatherCode(countyCode);
@@ -85,7 +96,8 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * @param countyCode
 	 */
 	private void queryWeatherCode(String countyCode) {
-		String address = "http://www.weather.com.cn/data/list3/city" + countyCode + ".xml";
+		String address = "http://www.weather.com.cn/data/list3/city"
+				+ countyCode + ".xml";
 		queryFromServer(address, "countyCode");
 	}
 
@@ -95,8 +107,9 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * @param weatherCode
 	 */
 	private void queryWeatherInfo(String weatherCode) {
-		//拼接网址不要换行，不然会出错，无法访问
-		String address = "http://www.weather.com.cn/data/cityinfo/" + weatherCode + ".html";
+		// 拼接网址不要换行，不然会出错，无法访问
+		String address = "http://www.weather.com.cn/data/cityinfo/"
+				+ weatherCode + ".html";
 		queryFromServer(address, "weatherCode");
 	}
 
@@ -112,15 +125,16 @@ public class WeatherActivity extends Activity implements OnClickListener {
 						String[] array = response.split("\\|");
 						if (array != null && array.length == 2) {
 							String weatherCode = array[1];
-							Log.i("LHD", "weatherCode"+weatherCode);
+							Log.i("LHD", "weatherCode" + weatherCode);
 							queryWeatherInfo(weatherCode);
 						}
 					}
-				} 
+				}
 				if ("weatherCode".equals(type)) {
 					Log.i("LHD", "else if weatherCode.equals(type))");
 					// 处理服务器返回的天气信息
-					Utility.handleWeatherResponse(WeatherActivity.this, response);
+					Utility.handleWeatherResponse(WeatherActivity.this,
+							response);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							showWeather();
@@ -154,9 +168,24 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
+		weatherstate = prefs.getString("weather_desp", "");
+		weatherpic(weatherstate);
 		// 默认启动后台自动更新服务
-//		Intent intent = new Intent(this, AutoUpdateService.class);
-//		startActivity(intent);
+		 Intent intent = new Intent(this, AutoUpdateService.class);
+//		 startActivity(intent);
+		 //BUG2 启动服务使用startService,误写成了startActivity
+		 startService(intent);
+	}
+
+	private void weatherpic(String weatherState) {
+		if("晴".equals(weatherState)){
+			main_layout.setBackgroundResource(R.drawable.qing);
+		}else if ("多云".equals(weatherState)) {
+			main_layout.setBackgroundResource(R.drawable.duoyun);
+		}else if ("小雨".equals(weatherState)) {
+			main_layout.setBackgroundResource(R.drawable.weimei_de_yu);
+		}
+		
 	}
 
 	@Override

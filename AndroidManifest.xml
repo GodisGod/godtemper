@@ -31,8 +31,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.example.godtemper.service.AutoUpdateService" >
-        </service>
+        <service android:name="com.example.godtemper.service.AutoUpdateService"></service>
 
         <activity android:name="com.example.godtemper.activity.WeatherActivity" >
         </activity>
